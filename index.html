@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChocoBliss — Premium Chocolate Wonderland</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo"><span>🍫</span> ChocoBliss</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="pages/about.html">About</a></li>
+      <li><a href="pages/contact.html">Contact</a></li>
+      <li><a href="pages/cart.html">Cart</a></li>
+      
+    </ul>
+    <button class="nav-cart" onclick="location.href='pages/cart.html'">
+      🛒 Cart <span class="cart-badge">0</span>
+    </button>
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Premium Artisan Chocolates</div>
+      <h1>Crafted for <em>Pure Bliss</em>,<br>Delivered to You</h1>
+      <p>From velvety dark to silky white — explore 200+ handcrafted chocolates made with the finest ingredients.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
+        <a href="pages/about.html" class="btn-outline">Our Story</a>
+      </div>
+    </div>
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+  <!-- FEATURES STRIP -->
+  <div class="features-strip">
+    <div class="feat-item">
+      <div class="feat-icon">🌿</div>
+      <div class="feat-label">100% Natural</div>
+      <div class="feat-desc">No artificial flavours</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">🚚</div>
+      <div class="feat-label">Free Delivery</div>
+      <div class="feat-desc">On orders above ₹499</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">🎁</div>
+      <div class="feat-label">Gift Ready</div>
+      <div class="feat-desc">Beautiful packaging</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">⭐</div>
+      <div class="feat-label">Premium Quality</div>
+      <div class="feat-desc">Handpicked cacao</div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="section" id="categories">
+    <div class="section-head">
+      <div class="section-eyebrow">Our Collection</div>
+      <h2 class="section-title">Find Your Perfect Chocolate</h2>
+      <p class="section-sub">Eight curated categories, each a world of flavour waiting to be discovered.</p>
+    </div>
+
+    <div class="cat-grid">
+
+      <a href="pages/chocolate.html" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=600&q=80" alt="Chocolate">
+        <div class="cat-info">
+          <div class="cat-tag">Classic</div>
+          <h3>Chocolate</h3>
+        </div>
+        <button class="cat-btn">Explore →</button>
+      </a>
+
+      <a href="pages/dark.html" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=600&q=80" alt="Dark Chocolate">
+        <div class="cat-info">
+          <div class="cat-tag">Rich & Bold</div>
+          <h3>Dark Chocolate</h3>
+        </div>
+        <button class="cat-btn">Explore →</button>
+      </a>
+
+      <a href="pages/milk.html" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=600&q=80" alt="Milk Chocolate">
+        <div class="cat-info">
+          <div class="cat-tag">Creamy & Sweet</div>
+          <h3>Milk Chocolate</h3>
+        </div>
+        <button class="cat-btn">Explore →</button>
+      </a>
+
+      <a href="pages/white.html" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80" alt="White Chocolate">
+        <div class="cat-info">
+          <div class="cat-tag">Silky & Delicate</div>
+          <h3>White Chocolate</h3>
+        </div>
+        <button class="cat-btn">Explore →</button>
+      </a>
+
+      <a href="pages/sugarfree.html" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1567206563114-c179900d7cf0?w=600&q=80" alt="Sugar Free">
+        <div class="cat-info">
+          <div class="cat-tag">Guilt-Free</div>
+          <h3>Sugar-Free</h3>
+        </div>
+        <button class="cat-btn">Explore →</button>
+      </a>
+
+      <a href="pages/diet.html" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=600&q=80" alt="Diet Chocolate">
+        <div class="cat-info">
+          <div class="cat-tag">Healthy Choice</div>
+          <h3>Diet Chocolate</h3>
+        </div>
+        <button class="cat-btn">Explore →</button>
+      </a>
+
+      <a href="pages/ruby.html" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=600&q=80" alt="Ruby Chocolate">
+        <div class="cat-info">
+          <div class="cat-tag">New & Unique</div>
+          <h3>Ruby Chocolate</h3>
+        </div>
+        <button class="cat-btn">Explore →</button>
+      </a>
+
+      <a href="pages/customized.html" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=600&q=80" alt="Customize">
+        <div class="cat-info">
+          <div class="cat-tag">Make It Yours</div>
+          <h3>Customize</h3>
+        </div>
+        <button class="cat-btn">Explore →</button>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">🍫 ChocoBliss</div>
+        <p>Your premium destination for artisan chocolates. Handcrafted with love, delivered with care.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="pages/dark.html">Dark Chocolate</a></li>
+          <li><a href="pages/milk.html">Milk Chocolate</a></li>
+          <li><a href="pages/white.html">White Chocolate</a></li>
+          <li><a href="pages/sugarfree.html">Sugar-Free</a></li>
+          <li><a href="pages/customized.html">Customize</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="pages/about.html">About Us</a></li>
+          <li><a href="pages/contact.html">Contact</a></li>
+          <li><a href="pages/login.html">Sign In</a></li>
+          <li><a href="pages/register.html">Register</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 ChocoBliss. All rights reserved.</span>
+      <span>Sweetness Delivered 🍫</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/cart.js"></script>
+</body>
+</html>

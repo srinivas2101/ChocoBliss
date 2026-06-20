@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customize Your Chocolate — ChocoBliss</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <style>
+    :root {
+      --bg: #100700;
+      --card: #1E0D00;
+      --border: rgba(255,255,255,.08);
+      --gold: #E8A838;
+      --caramel: #C4781F;
+      --muted: rgba(255,255,255,.45);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .builder-page {
+      background: var(--bg);
+      padding-top: 64px;
+      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── HEADER ── */
+    .bld-header {
+      background: linear-gradient(135deg, #1E0900 0%, #3C1E00 100%);
+      padding: 44px 24px 32px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .bld-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--gold);
+    }
+    .bld-header p { color: var(--muted); margin-top: 8px; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      background: #150800;
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .progress-wrap::-webkit-scrollbar { display: none; }
+    .progress-steps {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .prog-step {
+      flex: 1; min-width: 80px;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 14px 6px;
+      cursor: pointer;
+      position: relative;
+      transition: all .2s;
+    }
+    .prog-step::after {
+      content: '';
+      position: absolute; top: 24px; left: 50%; width: 100%; height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .prog-step:last-child::after { display: none; }
+    .prog-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #2A1200; border: 2px solid rgba(255,255,255,.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; font-weight: 700; color: var(--muted);
+      z-index: 1; transition: all .25s; position: relative;
+    }
+    .prog-step.done .prog-dot   { background: var(--caramel); border-color: var(--caramel); color: #fff; }
+    .prog-step.active .prog-dot { background: var(--gold); border-color: var(--gold); color: #1a0800; box-shadow: 0 0 12px rgba(232,168,56,.5); }
+    .prog-label { font-size: .65rem; color: var(--muted); margin-top: 6px; white-space: nowrap; }
+    .prog-step.active .prog-label { color: var(--gold); }
+    .prog-step.done .prog-label  { color: var(--caramel); }
+
+    /* ── MAIN LAYOUT ── */
+    .bld-body {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      max-width: 1280px;
+      margin: 0 auto;
+      gap: 0;
+      min-height: calc(100vh - 200px);
+    }
+
+    /* ── LEFT: STEP PANELS ── */
+    .bld-left {
+      padding: 36px 32px 60px 40px;
+      border-right: 1px solid var(--border);
+    }
+
+    .step-panel { display: none; animation: fadeSlide .35s ease; }
+    .step-panel.active { display: block; }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateX(16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: #fff;
+      margin-bottom: 6px;
+    }
+    .step-sub { color: var(--muted); font-size: .9rem; margin-bottom: 28px; }
+
+    /* ── BASE CARDS ── */
+    .base-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .base-card {
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      padding: 20px 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: all .25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .base-card::before {
+      content: ''; position: absolute; inset: 0;
+      opacity: 0; transition: opacity .3s;
+    }
+    .base-card:hover { border-color: rgba(232,168,56,.4); transform: translateY(-3px); }
+    .base-card.sel   { border-color: var(--gold); box-shadow: 0 0 20px rgba(232,168,56,.2); }
+    .base-card.sel .sel-tick { display: flex; }
+    .sel-tick {
+      display: none; position: absolute; top: 10px; right: 10px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--gold); color: #1a0800;
+      font-size: .65rem; font-weight: 900;
+      align-items: center; justify-content: center;
+    }
+    .base-swatch {
+      width: 52px; height: 52px; border-radius: 50%;
+      margin: 0 auto 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.4);
+    }
+    .base-name { font-size: .92rem; font-weight: 700; color: #fff; }
+    .base-tag  { font-size: .72rem; color: var(--muted); margin-top: 4px; }
+    .base-price { font-size: .78rem; color: var(--caramel); margin-top: 6px; font-weight: 600; }
+
+    /* ── WRAPPER COLOUR ── */
+    .wrap-grid {
+      display: flex; flex-wrap: wrap; gap: 16px;
+    }
+    .wrap-swatch {
+      position: relative;
+      width: 64px; height: 64px; border-radius: 14px;
+      cursor: pointer; transition: transform .2s;
+      box-shadow: 0 4px 14px rgba(0,0,0,.4);
+      border: 3px solid transparent;
+    }
+    .wrap-swatch:hover   { transform: scale(1.1); }
+    .wrap-swatch.sel     { border-color: var(--gold); transform: scale(1.14); box-shadow: 0 0 16px rgba(232,168,56,.4); }
+    .wrap-name {
+      position: absolute; bottom: -22px; left: 50%;
+      transform: translateX(-50%); white-space: nowrap;
+      font-size: .65rem; color: var(--muted);
+    }
+    .wrap-swatch.sel .wrap-name { color: var(--gold); }
+
+    /* ── FLAVOUR CHIPS ── */
+    .flavour-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    .fl-chip {
+      padding: 10px 18px; border-radius: 999px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      color: #ccc; font-size: .86rem; font-weight: 500;
+      cursor: pointer; transition: all .2s; user-select: none;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .fl-chip:hover { border-color: rgba(232,168,56,.5); color: var(--gold); }
+    .fl-chip.sel   { border-color: var(--gold); background: rgba(232,168,56,.12); color: var(--gold); font-weight: 700; }
+    .fl-extra { font-size: .72rem; color: var(--caramel); }
+    .fl-chip.sel .fl-extra { color: var(--gold); }
+
+    /* ── MOULD (shape) ── */
+    .mould-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .mould-card {
+      border: 2px solid var(--border); background: var(--card);
+      border-radius: 14px; padding: 18px 10px;
+      text-align: center; cursor: pointer; transition: all .2s;
+    }
+    .mould-card:hover { border-color: rgba(232,168,56,.4); }
+    .mould-card.sel   { border-color: var(--gold); background: rgba(232,168,56,.08); }
+    .mould-icon { font-size: 2rem; margin-bottom: 8px; }
+    .mould-name { font-size: .82rem; color: #ccc; }
+    .mould-card.sel .mould-name { color: var(--gold); }
+
+    /* ── FILLING ── */
+    .filling-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .fill-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px; border-radius: 14px;
+      border: 2px solid var(--border); background: var(--card);
+      cursor: pointer; transition: all .2s;
+    }
+    .fill-card:hover { border-color: rgba(232,168,56,.4); }
+    .fill-card.sel   { border-color: var(--gold); background: rgba(232,168,56,.08); }
+    .fill-icon { font-size: 1.6rem; }
+    .fill-info { flex: 1; }
+    .fill-name { font-size: .9rem; font-weight: 600; color: #fff; }
+    .fill-desc { font-size: .75rem; color: var(--muted); }
+    .fill-price { font-size: .78rem; color: var(--caramel); font-weight: 600; }
+
+    /* ── TOPPINGS ── */
+    .top-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .top-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 14px;
+      border: 2px solid var(--border); background: var(--card);
+      cursor: pointer; transition: all .2s; user-select: none;
+    }
+    .top-card:hover { border-color: rgba(232,168,56,.4); }
+    .top-card.sel   { border-color: var(--gold); background: rgba(232,168,56,.08); }
+    .top-icon { font-size: 1.5rem; }
+    .top-info { flex: 1; }
+    .top-name  { font-size: .88rem; font-weight: 600; color: #fff; }
+    .top-price { font-size: .75rem; color: var(--caramel); }
+    .top-chk {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .72rem; color: transparent; transition: all .2s;
+      flex-shrink: 0;
+    }
+    .top-card.sel .top-chk { background: var(--gold); border-color: var(--gold); color: #1a0800; }
+
+    /* ── SIZE ── */
+    .size-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .size-card {
+      border: 2px solid var(--border); background: var(--card);
+      border-radius: 16px; padding: 22px 18px;
+      cursor: pointer; transition: all .2s; position: relative;
+    }
+    .size-card:hover { border-color: rgba(232,168,56,.4); transform: translateY(-2px); }
+    .size-card.sel   { border-color: var(--gold); background: rgba(232,168,56,.08); }
+    .size-popular {
+      position: absolute; top: -1px; right: 14px;
+      background: var(--caramel); color: #fff;
+      font-size: .62rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; padding: 3px 10px;
+      border-radius: 0 0 8px 8px;
+    }
+    .size-weight { font-size: 1.5rem; font-weight: 800; color: #fff; }
+    .size-desc   { font-size: .8rem; color: var(--muted); margin: 4px 0 10px; }
+    .size-price  { font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+
+    /* ── GIFT / QTY ── */
+    .gift-row { display: flex; flex-direction: column; gap: 16px; }
+    .gift-label { font-size: .82rem; font-weight: 600; color: #ccc; margin-bottom: 6px; display: block; }
+    .gift-input, .gift-ta {
+      width: 100%; padding: 12px 16px;
+      border-radius: 12px; border: 2px solid var(--border);
+      background: rgba(255,255,255,.05); color: #fff;
+      font-size: .9rem; font-family: inherit; outline: none;
+      transition: border-color .2s;
+    }
+    .gift-input::placeholder, .gift-ta::placeholder { color: rgba(255,255,255,.28); }
+    .gift-input:focus, .gift-ta:focus { border-color: rgba(232,168,56,.5); }
+    .gift-ta { resize: none; }
+    .char-hint { font-size: .72rem; color: rgba(255,255,255,.28); text-align: right; margin-top: 4px; }
+
+    .qty-row { display: flex; align-items: center; gap: 18px; margin-top: 8px; }
+    .qty-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 2px solid var(--border); background: none;
+      color: #fff; font-size: 1.3rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all .2s;
+    }
+    .qty-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .qty-val { font-size: 1.6rem; font-weight: 800; color: #fff; min-width: 36px; text-align: center; }
+    .qty-unit { font-size: .84rem; color: var(--muted); }
+
+    /* ── NAV BUTTONS ── */
+    .step-nav {
+      display: flex; gap: 12px; margin-top: 36px;
+    }
+    .btn-back {
+      padding: 12px 24px; border-radius: 12px;
+      border: 2px solid var(--border); background: none;
+      color: var(--muted); font-size: .9rem; cursor: pointer; transition: all .2s;
+    }
+    .btn-back:hover { border-color: rgba(255,255,255,.3); color: #fff; }
+    .btn-next {
+      flex: 1; padding: 14px 24px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--caramel), var(--gold));
+      border: none; color: #1a0800; font-size: .95rem; font-weight: 800;
+      cursor: pointer; transition: all .2s; letter-spacing: .3px;
+    }
+    .btn-next:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(232,168,56,.35); }
+    .btn-add {
+      flex: 1; padding: 14px 24px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--caramel), var(--gold));
+      border: none; color: #1a0800; font-size: 1rem; font-weight: 800;
+      cursor: pointer; transition: all .2s; letter-spacing: .3px;
+    }
+    .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,168,56,.45); }
+
+    /* ── RIGHT: PREVIEW ── */
+    .bld-right {
+      position: sticky; top: 64px; height: calc(100vh - 64px);
+      overflow-y: auto; padding: 32px 32px 40px 28px;
+      scrollbar-width: thin;
+    }
+
+    .preview-label {
+      font-size: .72rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--caramel);
+      margin-bottom: 16px;
+    }
+
+    /* ── CANVAS BAR ── */
+    .canvas-wrap {
+      position: relative; margin-bottom: 20px;
+      border-radius: 20px; overflow: hidden;
+      background: #1a0900;
+      box-shadow: 0 16px 48px rgba(0,0,0,.6);
+    }
+    #choc-canvas { display: block; width: 100%; }
+
+    .bar-label-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 10px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,.7), transparent);
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .bar-choc-name {
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem; color: #fff;
+      max-width: 200px; line-height: 1.2;
+    }
+    .bar-msg-tag {
+      font-size: .7rem; color: var(--gold); font-style: italic;
+      max-width: 100px; text-align: right; line-height: 1.3;
+    }
+
+    /* ── SUMMARY CARD ── */
+    .sum-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 20px;
+      margin-top: 16px;
+    }
+    .sum-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: #fff; margin-bottom: 14px;
+    }
+    .sum-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 0; font-size: .84rem;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      color: var(--muted);
+    }
+    .sum-row:last-of-type { border-bottom: none; }
+    .sum-val { color: #e0e0e0; font-weight: 500; text-align: right; max-width: 60%; }
+    .sum-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 0 0; margin-top: 8px;
+      border-top: 2px solid rgba(255,255,255,.1);
+      font-size: 1.1rem; font-weight: 800; color: var(--gold);
+    }
+
+    /* ── RESET ── */
+    .reset-link {
+      display: block; text-align: center; margin-top: 14px;
+      font-size: .8rem; color: rgba(255,255,255,.28);
+      cursor: pointer; transition: color .2s;
+    }
+    .reset-link:hover { color: rgba(255,255,255,.6); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:960px){
+      .bld-body { grid-template-columns: 1fr; }
+      .bld-right {
+        position: static; height: auto;
+        border-top: 1px solid var(--border);
+        padding: 28px 20px 40px;
+      }
+      .bld-left { padding: 28px 20px 20px; border-right: none; }
+    }
+    @media(max-width:540px){
+      .base-grid  { grid-template-columns: repeat(2,1fr); }
+      .mould-grid { grid-template-columns: repeat(2,1fr); }
+      .size-grid  { grid-template-columns: 1fr; }
+      .top-grid   { grid-template-columns: 1fr; }
+      .filling-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="../index.html" class="nav-logo"><span>🍫</span> ChocoBliss</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="cart.html">Cart</a></li>
+  </ul>
+  <button class="nav-cart" onclick="location.href='cart.html'">
+    🛒 Cart <span class="cart-badge">0</span>
+  </button>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="builder-page">
+  <div class="bld-header">
+    <h1>🍫 Craft Your Chocolate</h1>
+    <p>Design every detail — base, shape, filling, toppings, and more.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-steps" id="progress-steps">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <div class="bld-body">
+
+    <!-- LEFT STEPS -->
+    <div class="bld-left" id="bld-left">
+
+      <!-- STEP 1: BASE -->
+      <div class="step-panel active" id="sp-0">
+        <div class="step-title">Choose Your Base</div>
+        <div class="step-sub">This is the foundation of your chocolate — pick the one that speaks to you.</div>
+        <div class="base-grid">
+          <div class="base-card sel" onclick="pickBase(this,'Dark','#2A0F00','Bold & intense',0)">
+            <div class="sel-tick">✓</div>
+            <div class="base-swatch" style="background:linear-gradient(145deg,#5C2600,#2A0F00)"></div>
+            <div class="base-name">🍫 Dark</div>
+            <div class="base-tag">Bold & intense</div>
+            <div class="base-price">Base</div>
+          </div>
+          <div class="base-card" onclick="pickBase(this,'Milk','#7B3A10','Creamy & sweet',0)">
+            <div class="sel-tick">✓</div>
+            <div class="base-swatch" style="background:linear-gradient(145deg,#C4782A,#7B3A10)"></div>
+            <div class="base-name">🥛 Milk</div>
+            <div class="base-tag">Creamy & sweet</div>
+            <div class="base-price">Base</div>
+          </div>
+          <div class="base-card" onclick="pickBase(this,'White','#E8D5A0','Silky & delicate',20)">
+            <div class="sel-tick">✓</div>
+            <div class="base-swatch" style="background:linear-gradient(145deg,#FFF0C8,#D4B870)"></div>
+            <div class="base-name">🤍 White</div>
+            <div class="base-tag">Silky & delicate</div>
+            <div class="base-price">+₹20</div>
+          </div>
+          <div class="base-card" onclick="pickBase(this,'Ruby','#8B2A4A','Fruity & unique',30)">
+            <div class="sel-tick">✓</div>
+            <div class="base-swatch" style="background:linear-gradient(145deg,#D4507A,#8B2A4A)"></div>
+            <div class="base-name">🩷 Ruby</div>
+            <div class="base-tag">Fruity & unique</div>
+            <div class="base-price">+₹30</div>
+          </div>
+          <div class="base-card" onclick="pickBase(this,'Sugar-Free','#1E0C00','Guilt-free bliss',10)">
+            <div class="sel-tick">✓</div>
+            <div class="base-swatch" style="background:linear-gradient(145deg,#3A1A00,#1E0C00)"></div>
+            <div class="base-name">💚 Sugar-Free</div>
+            <div class="base-tag">Guilt-free bliss</div>
+            <div class="base-price">+₹10</div>
+          </div>
+          <div class="base-card" onclick="pickBase(this,'Vegan Dark','#2A1800','Plant-powered',15)">
+            <div class="sel-tick">✓</div>
+            <div class="base-swatch" style="background:linear-gradient(145deg,#5A3010,#2A1800)"></div>
+            <div class="base-name">🌱 Vegan</div>
+            <div class="base-tag">Plant-powered</div>
+            <div class="base-price">+₹15</div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-next" onclick="goStep(1)">Next: Wrapper Colour →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: WRAPPER -->
+      <div class="step-panel" id="sp-1">
+        <div class="step-title">Wrapper Colour</div>
+        <div class="step-sub">The first thing they see — make it count.</div>
+        <div class="wrap-grid" id="wrap-grid">
+          <div class="wrap-swatch sel" style="background:#C4781F" onclick="pickWrap(this,'Caramel','#C4781F')"><span class="wrap-name">Caramel</span></div>
+          <div class="wrap-swatch" style="background:#8B1A1A" onclick="pickWrap(this,'Ruby Red','#8B1A1A')"><span class="wrap-name">Ruby Red</span></div>
+          <div class="wrap-swatch" style="background:#1A3A5C" onclick="pickWrap(this,'Midnight','#1A3A5C')"><span class="wrap-name">Midnight</span></div>
+          <div class="wrap-swatch" style="background:#2D5A27" onclick="pickWrap(this,'Forest','#2D5A27')"><span class="wrap-name">Forest</span></div>
+          <div class="wrap-swatch" style="background:#4A2C6E" onclick="pickWrap(this,'Purple','#4A2C6E')"><span class="wrap-name">Purple</span></div>
+          <div class="wrap-swatch" style="background:#1A1A1A;border:1px solid #444" onclick="pickWrap(this,'Matte Black','#1A1A1A')"><span class="wrap-name">Black</span></div>
+          <div class="wrap-swatch" style="background:linear-gradient(135deg,#E8C850,#B8941A)" onclick="pickWrap(this,'Gold','#C0A030')"><span class="wrap-name">Gold</span></div>
+          <div class="wrap-swatch" style="background:linear-gradient(135deg,#D0D0E0,#909098);border:1px solid #666" onclick="pickWrap(this,'Silver','#A0A0B0')"><span class="wrap-name">Silver</span></div>
+          <div class="wrap-swatch" style="background:linear-gradient(135deg,#FF9EB0,#E05878)" onclick="pickWrap(this,'Rose Pink','#E0607A')"><span class="wrap-name">Rose Pink</span></div>
+          <div class="wrap-swatch" style="background:linear-gradient(135deg,#60C0FF,#2060C0)" onclick="pickWrap(this,'Ocean Blue','#3080C0')"><span class="wrap-name">Ocean Blue</span></div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back" onclick="goStep(0)">← Back</button>
+          <button class="btn-next" onclick="goStep(2)">Next: Flavour →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: FLAVOUR -->
+      <div class="step-panel" id="sp-2">
+        <div class="step-title">Flavour Infusion</div>
+        <div class="step-sub">Add a twist that transforms the whole experience.</div>
+        <div class="flavour-grid">
+          <div class="fl-chip sel" onclick="pickFl(this,'Classic',0)">✨ Classic</div>
+          <div class="fl-chip" onclick="pickFl(this,'Almond',15)">🥜 Almond <span class="fl-extra">+₹15</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Hazelnut',15)">🌰 Hazelnut <span class="fl-extra">+₹15</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Raspberry',20)">🍓 Raspberry <span class="fl-extra">+₹20</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Mint',10)">🌿 Mint <span class="fl-extra">+₹10</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Orange Zest',10)">🍊 Orange Zest <span class="fl-extra">+₹10</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Caramel',20)">🍮 Caramel <span class="fl-extra">+₹20</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Espresso',15)">☕ Espresso <span class="fl-extra">+₹15</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Lavender',25)">💜 Lavender <span class="fl-extra">+₹25</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Saffron',35)">🌸 Saffron <span class="fl-extra">+₹35</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Chilli',20)">🌶️ Chilli <span class="fl-extra">+₹20</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Rose',20)">🌹 Rose <span class="fl-extra">+₹20</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Matcha',25)">🍵 Matcha <span class="fl-extra">+₹25</span></div>
+          <div class="fl-chip" onclick="pickFl(this,'Coconut',15)">🥥 Coconut <span class="fl-extra">+₹15</span></div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back" onclick="goStep(1)">← Back</button>
+          <button class="btn-next" onclick="goStep(3)">Next: Shape →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: MOULD -->
+      <div class="step-panel" id="sp-3">
+        <div class="step-title">Choose Your Shape</div>
+        <div class="step-sub">The mould defines the look of every square.</div>
+        <div class="mould-grid">
+          <div class="mould-card sel" onclick="pickMould(this,'Classic Bar')">
+            <div class="mould-icon">🟫</div>
+            <div class="mould-name">Classic Bar</div>
+          </div>
+          <div class="mould-card" onclick="pickMould(this,'Hearts')">
+            <div class="mould-icon">❤️</div>
+            <div class="mould-name">Hearts</div>
+          </div>
+          <div class="mould-card" onclick="pickMould(this,'Squares')">
+            <div class="mould-icon">⬛</div>
+            <div class="mould-name">Squares</div>
+          </div>
+          <div class="mould-card" onclick="pickMould(this,'Rounds')">
+            <div class="mould-icon">⚫</div>
+            <div class="mould-name">Rounds</div>
+          </div>
+          <div class="mould-card" onclick="pickMould(this,'Stars')">
+            <div class="mould-icon">⭐</div>
+            <div class="mould-name">Stars</div>
+          </div>
+          <div class="mould-card" onclick="pickMould(this,'Leaves')">
+            <div class="mould-icon">🍃</div>
+            <div class="mould-name">Leaves</div>
+          </div>
+          <div class="mould-card" onclick="pickMould(this,'Roses')">
+            <div class="mould-icon">🌹</div>
+            <div class="mould-name">Roses</div>
+          </div>
+          <div class="mould-card" onclick="pickMould(this,'Diamonds')">
+            <div class="mould-icon">💎</div>
+            <div class="mould-name">Diamonds</div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back" onclick="goStep(2)">← Back</button>
+          <button class="btn-next" onclick="goStep(4)">Next: Filling →</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: FILLING -->
+      <div class="step-panel" id="sp-4">
+        <div class="step-title">Add a Filling</div>
+        <div class="step-sub">A surprise inside every bite — optional but irresistible.</div>
+        <div class="filling-grid">
+          <div class="fill-card sel" onclick="pickFill(this,'None',0)">
+            <div class="fill-icon">🚫</div>
+            <div class="fill-info">
+              <div class="fill-name">No Filling</div>
+              <div class="fill-desc">Pure chocolate, solid through</div>
+              <div class="fill-price">Included</div>
+            </div>
+          </div>
+          <div class="fill-card" onclick="pickFill(this,'Hazelnut Praline',25)">
+            <div class="fill-icon">🌰</div>
+            <div class="fill-info">
+              <div class="fill-name">Hazelnut Praline</div>
+              <div class="fill-desc">Smooth, nutty centre</div>
+              <div class="fill-price">+₹25</div>
+            </div>
+          </div>
+          <div class="fill-card" onclick="pickFill(this,'Salted Caramel',20)">
+            <div class="fill-icon">🍮</div>
+            <div class="fill-info">
+              <div class="fill-name">Salted Caramel</div>
+              <div class="fill-desc">Gooey & golden</div>
+              <div class="fill-price">+₹20</div>
+            </div>
+          </div>
+          <div class="fill-card" onclick="pickFill(this,'Raspberry Ganache',30)">
+            <div class="fill-icon">🍓</div>
+            <div class="fill-info">
+              <div class="fill-name">Raspberry Ganache</div>
+              <div class="fill-desc">Tart berry burst</div>
+              <div class="fill-price">+₹30</div>
+            </div>
+          </div>
+          <div class="fill-card" onclick="pickFill(this,'Vanilla Cream',20)">
+            <div class="fill-icon">🍦</div>
+            <div class="fill-info">
+              <div class="fill-name">Vanilla Cream</div>
+              <div class="fill-desc">Light & airy</div>
+              <div class="fill-price">+₹20</div>
+            </div>
+          </div>
+          <div class="fill-card" onclick="pickFill(this,'Espresso Truffle',30)">
+            <div class="fill-icon">☕</div>
+            <div class="fill-info">
+              <div class="fill-name">Espresso Truffle</div>
+              <div class="fill-desc">Bold coffee hit</div>
+              <div class="fill-price">+₹30</div>
+            </div>
+          </div>
+          <div class="fill-card" onclick="pickFill(this,'Mango Coulis',25)">
+            <div class="fill-icon">🥭</div>
+            <div class="fill-info">
+              <div class="fill-name">Mango Coulis</div>
+              <div class="fill-desc">Tropical surprise</div>
+              <div class="fill-price">+₹25</div>
+            </div>
+          </div>
+          <div class="fill-card" onclick="pickFill(this,'Peanut Butter',20)">
+            <div class="fill-icon">🥜</div>
+            <div class="fill-info">
+              <div class="fill-name">Peanut Butter</div>
+              <div class="fill-desc">Rich & roasted</div>
+              <div class="fill-price">+₹20</div>
+            </div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back" onclick="goStep(3)">← Back</button>
+          <button class="btn-next" onclick="goStep(5)">Next: Toppings →</button>
+        </div>
+      </div>
+
+      <!-- STEP 6: TOPPINGS -->
+      <div class="step-panel" id="sp-5">
+        <div class="step-title">Toppings</div>
+        <div class="step-sub">Decorate the surface — pick as many as you like.</div>
+        <div class="top-grid">
+          <div class="top-card" onclick="toggleTop(this,'Crushed Almonds','almond',20)">
+            <div class="top-icon">🥜</div>
+            <div class="top-info"><div class="top-name">Crushed Almonds</div><div class="top-price">+₹20</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+          <div class="top-card" onclick="toggleTop(this,'Sea Salt Flakes','salt',15)">
+            <div class="top-icon">🧂</div>
+            <div class="top-info"><div class="top-name">Sea Salt Flakes</div><div class="top-price">+₹15</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+          <div class="top-card" onclick="toggleTop(this,'Rose Petals','rose',25)">
+            <div class="top-icon">🌹</div>
+            <div class="top-info"><div class="top-name">Dried Rose Petals</div><div class="top-price">+₹25</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+          <div class="top-card" onclick="toggleTop(this,'Edible Gold Dust','gold',40)">
+            <div class="top-icon">✨</div>
+            <div class="top-info"><div class="top-name">Edible Gold Dust</div><div class="top-price">+₹40</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+          <div class="top-card" onclick="toggleTop(this,'Pistachio Crumble','pistachio',20)">
+            <div class="top-icon">🫘</div>
+            <div class="top-info"><div class="top-name">Pistachio Crumble</div><div class="top-price">+₹20</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+          <div class="top-card" onclick="toggleTop(this,'Freeze-Dried Berries','berry',30)">
+            <div class="top-icon">🫐</div>
+            <div class="top-info"><div class="top-name">Freeze-Dried Berries</div><div class="top-price">+₹30</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+          <div class="top-card" onclick="toggleTop(this,'Coconut Flakes','coconut',15)">
+            <div class="top-icon">🥥</div>
+            <div class="top-info"><div class="top-name">Coconut Flakes</div><div class="top-price">+₹15</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+          <div class="top-card" onclick="toggleTop(this,'Chilli Flakes','chilli',20)">
+            <div class="top-icon">🌶️</div>
+            <div class="top-info"><div class="top-name">Chilli Flakes</div><div class="top-price">+₹20</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+          <div class="top-card" onclick="toggleTop(this,'Cocoa Nibs','cocoa',15)">
+            <div class="top-icon">☕</div>
+            <div class="top-info"><div class="top-name">Cocoa Nibs</div><div class="top-price">+₹15</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+          <div class="top-card" onclick="toggleTop(this,'Honeycomb Bits','honey',25)">
+            <div class="top-icon">🍯</div>
+            <div class="top-info"><div class="top-name">Honeycomb Bits</div><div class="top-price">+₹25</div></div>
+            <div class="top-chk">✓</div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back" onclick="goStep(4)">← Back</button>
+          <button class="btn-next" onclick="goStep(6)">Next: Size →</button>
+        </div>
+      </div>
+
+      <!-- STEP 7: SIZE -->
+      <div class="step-panel" id="sp-6">
+        <div class="step-title">Size & Quantity</div>
+        <div class="step-sub">Choose how much joy you want in each box.</div>
+        <div class="size-grid">
+          <div class="size-card sel" onclick="pickSize(this,'50g',99)">
+            <div class="size-weight">50g</div>
+            <div class="size-desc">A perfect single-serve treat</div>
+            <div class="size-price">₹99</div>
+          </div>
+          <div class="size-card" onclick="pickSize(this,'100g',179)">
+            <div class="size-weight">100g</div>
+            <div class="size-desc">Great to share with one</div>
+            <div class="size-price">₹179</div>
+          </div>
+          <div class="size-card" onclick="pickSize(this,'200g',329)">
+            <div class="size-popular">Popular</div>
+            <div class="size-weight">200g</div>
+            <div class="size-desc">The sweet spot for gifting</div>
+            <div class="size-price">₹329</div>
+          </div>
+          <div class="size-card" onclick="pickSize(this,'500g Gift Box',699)">
+            <div class="size-weight">🎁 500g</div>
+            <div class="size-desc">Luxurious gift box edition</div>
+            <div class="size-price">₹699</div>
+          </div>
+        </div>
+        <div style="margin-top:28px;">
+          <label class="gift-label">Quantity</label>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <div class="qty-val" id="qty-val">1</div>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+            <span class="qty-unit" id="qty-unit">× ₹99 each</span>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back" onclick="goStep(5)">← Back</button>
+          <button class="btn-next" onclick="goStep(7)">Next: Gift Message →</button>
+        </div>
+      </div>
+
+      <!-- STEP 8: GIFT -->
+      <div class="step-panel" id="sp-7">
+        <div class="step-title">Gift Message</div>
+        <div class="step-sub">Add a personal touch — printed on the inner wrapper. Optional.</div>
+        <div class="gift-row">
+          <div>
+            <label class="gift-label">Recipient Name (optional)</label>
+            <input class="gift-input" id="gift-to" type="text" maxlength="30" placeholder="e.g. Priya, Mom, Mr. Rajan…" oninput="updateGift()">
+          </div>
+          <div>
+            <label class="gift-label">Your Message <span style="color:#555;font-weight:400;">(max 80 chars)</span></label>
+            <textarea class="gift-ta" id="gift-msg" rows="3" maxlength="80" placeholder="e.g. Happy Birthday! Made with love 🍫" oninput="updateGift()"></textarea>
+            <div class="char-hint"><span id="char-n">0</span>/80</div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back" onclick="goStep(6)">← Back</button>
+          <button class="btn-add" onclick="addToCart()">🛒 Add to Cart</button>
+        </div>
+      </div>
+
+    </div><!-- end bld-left -->
+
+    <!-- RIGHT: LIVE PREVIEW -->
+    <div class="bld-right">
+      <div class="preview-label">Live Preview</div>
+
+      <div class="canvas-wrap">
+        <canvas id="choc-canvas" width="356" height="220"></canvas>
+        <div class="bar-label-overlay">
+          <div class="bar-choc-name" id="bar-name">Classic Dark Chocolate</div>
+          <div class="bar-msg-tag" id="bar-msg"></div>
+        </div>
+      </div>
+
+      <div class="sum-card">
+        <div class="sum-title">Your Creation</div>
+        <div class="sum-row"><span>Base</span><span class="sum-val" id="s-base">Dark</span></div>
+        <div class="sum-row"><span>Wrapper</span><span class="sum-val" id="s-wrap">Caramel</span></div>
+        <div class="sum-row"><span>Flavour</span><span class="sum-val" id="s-flavour">Classic</span></div>
+        <div class="sum-row"><span>Shape</span><span class="sum-val" id="s-mould">Classic Bar</span></div>
+        <div class="sum-row"><span>Filling</span><span class="sum-val" id="s-fill">None</span></div>
+        <div class="sum-row"><span>Toppings</span><span class="sum-val" id="s-tops">None</span></div>
+        <div class="sum-row"><span>Size</span><span class="sum-val" id="s-size">50g</span></div>
+        <div class="sum-row"><span>Qty</span><span class="sum-val" id="s-qty">× 1</span></div>
+        <div class="sum-row"><span>Gift To</span><span class="sum-val" id="s-giftto">—</span></div>
+        <div class="sum-total">
+          <span>Total</span><span id="s-total">₹99</span>
+        </div>
+      </div>
+
+      <span class="reset-link" onclick="resetAll()">↺ Start Over</span>
+    </div>
+
+  </div><!-- end bld-body -->
+</div><!-- end builder-page -->
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><div class="logo">🍫 ChocoBliss</div><p>Premium artisan chocolates delivered to your door.</p></div>
+    <div class="footer-col"><h4>Shop</h4><ul><li><a href="dark.html">Dark</a></li><li><a href="milk.html">Milk</a></li><li><a href="white.html">White</a></li><li><a href="sugarfree.html">Sugar-Free</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 ChocoBliss</span><span>Sweetness Delivered 🍫</span></div>
+</footer>
+
+<script src="../assets/js/cart.js"></script>
+<script>
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+const S = {
+  step: 0,
+  base:    { label:'Dark',        color:'#2A0F00', extra:0 },
+  wrap:    { label:'Caramel',     color:'#C4781F' },
+  flavour: { label:'Classic',     extra:0 },
+  mould:   'Classic Bar',
+  fill:    { label:'None',        extra:0 },
+  toppings:[],
+  size:    { label:'50g',         price:99 },
+  qty:     1,
+  giftTo:  '',
+  giftMsg: ''
+};
+
+const STEPS = [
+  'Base','Wrapper','Flavour','Shape','Filling','Toppings','Size','Gift'
+];
+
+// ═══════════════════════════════════════
+//  PROGRESS BAR
+// ═══════════════════════════════════════
+function buildProgress() {
+  const wrap = document.getElementById('progress-steps');
+  wrap.innerHTML = STEPS.map((label, i) => `
+    <div class="prog-step ${i < S.step ? 'done' : i===S.step ? 'active' : ''}" onclick="goStep(${i})">
+      <div class="prog-dot">${i < S.step ? '✓' : i+1}</div>
+      <div class="prog-label">${label}</div>
+    </div>
+  `).join('');
+}
+
+function goStep(n) {
+  document.getElementById(`sp-${S.step}`).classList.remove('active');
+  S.step = n;
+  document.getElementById(`sp-${S.step}`).classList.add('active');
+  buildProgress();
+  document.getElementById('bld-left').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ═══════════════════════════════════════
+//  PICKERS
+// ═══════════════════════════════════════
+function pickBase(el, label, color, tag, extra) {
+  el.closest('.base-grid').querySelectorAll('.base-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  S.base = { label, color, extra };
+  drawCanvas(); refreshSummary();
+}
+
+function pickWrap(el, label, color) {
+  document.querySelectorAll('.wrap-swatch').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  S.wrap = { label, color };
+  drawCanvas(); refreshSummary();
+}
+
+function pickFl(el, label, extra) {
+  el.closest('.flavour-grid').querySelectorAll('.fl-chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  S.flavour = { label, extra };
+  refreshSummary();
+}
+
+function pickMould(el, label) {
+  el.closest('.mould-grid').querySelectorAll('.mould-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  S.mould = label;
+  drawCanvas(); refreshSummary();
+}
+
+function pickFill(el, label, extra) {
+  el.closest('.filling-grid').querySelectorAll('.fill-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  S.fill = { label, extra };
+  refreshSummary();
+}
+
+function toggleTop(el, label, type, cost) {
+  const idx = S.toppings.findIndex(t => t.label === label);
+  if (idx > -1) { S.toppings.splice(idx, 1); el.classList.remove('sel'); }
+  else          { S.toppings.push({ label, type, cost }); el.classList.add('sel'); }
+  drawCanvas(); refreshSummary();
+}
+
+function pickSize(el, label, price) {
+  el.closest('.size-grid').querySelectorAll('.size-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  S.size = { label, price };
+  document.getElementById('qty-unit').textContent = `× ₹${price} each`;
+  refreshSummary();
+}
+
+function changeQty(d) {
+  S.qty = Math.max(1, Math.min(20, S.qty + d));
+  document.getElementById('qty-val').textContent = S.qty;
+  refreshSummary();
+}
+
+function updateGift() {
+  S.giftTo  = document.getElementById('gift-to').value;
+  S.giftMsg = document.getElementById('gift-msg').value;
+  document.getElementById('char-n').textContent = S.giftMsg.length;
+  document.getElementById('bar-msg').textContent = S.giftMsg ? `"${S.giftMsg}"` : '';
+  document.getElementById('s-giftto').textContent = S.giftTo || '—';
+}
+
+// ═══════════════════════════════════════
+//  CANVAS DRAW — real-time chocolate bar
+// ═══════════════════════════════════════
+function drawCanvas() {
+  const canvas = document.getElementById('choc-canvas');
+  const ctx    = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // Background glow
+  ctx.clearRect(0, 0, W, H);
+  const bg = ctx.createRadialGradient(W/2, H/2, 10, W/2, H/2, W*0.7);
+  bg.addColorStop(0, hexAlpha(S.base.color, .5));
+  bg.addColorStop(1, '#0a0400');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Wrapper band (top) ──
+  const wrapH = 36;
+  ctx.save();
+  const wrapGrad = ctx.createLinearGradient(0, 0, W, wrapH);
+  wrapGrad.addColorStop(0, lightenHex(S.wrap.color, 30));
+  wrapGrad.addColorStop(1, darkenHex(S.wrap.color, 10));
+  ctx.fillStyle = wrapGrad;
+  ctx.fillRect(0, 0, W, wrapH);
+  // wrapper text
+  ctx.font = 'bold 11px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.letterSpacing = '2px';
+  ctx.fillText('✦ CHOCOBLISS  ×  ' + S.wrap.label.toUpperCase() + '  ✦', 16, 23);
+  ctx.restore();
+
+  // ── Main chocolate bar body ──
+  const barX = 30, barY = wrapH + 18, barW = W - 60, barH = H - wrapH - 50;
+  const radius = 12;
+
+  // Bar shadow
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.6)';
+  ctx.shadowBlur = 24;
+  ctx.shadowOffsetY = 8;
+
+  // Bar base gradient
+  const barGrad = ctx.createLinearGradient(barX, barY, barX + barW, barY + barH);
+  barGrad.addColorStop(0, lightenHex(S.base.color, 25));
+  barGrad.addColorStop(0.4, S.base.color);
+  barGrad.addColorStop(1, darkenHex(S.base.color, 20));
+  roundRect(ctx, barX, barY, barW, barH, radius);
+  ctx.fillStyle = barGrad;
+  ctx.fill();
+  ctx.restore();
+
+  // Bar top sheen
+  const sheenGrad = ctx.createLinearGradient(barX, barY, barX, barY + barH * 0.5);
+  sheenGrad.addColorStop(0, 'rgba(255,255,255,0.15)');
+  sheenGrad.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.save();
+  roundRect(ctx, barX, barY, barW, barH/2, radius);
+  ctx.fillStyle = sheenGrad;
+  ctx.fill();
+  ctx.restore();
+
+  // ── Segments (depends on mould) ──
+  drawSegments(ctx, barX, barY, barW, barH, S.mould, S.base.color);
+
+  // ── Toppings on bar ──
+  drawToppings(ctx, barX + 8, barY + 8, barW - 16, barH - 16);
+
+  // ── Brand stamp ──
+  ctx.save();
+  ctx.font = 'bold 8px Playfair Display, serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.textAlign = 'center';
+  ctx.letterSpacing = '3px';
+  ctx.fillText('CHOCOBLISS', W/2, barY + barH/2 + 4);
+  ctx.restore();
+
+  // ── Bottom wrapper label ──
+  const lblY = barY + barH + 6;
+  ctx.save();
+  const lblGrad = ctx.createLinearGradient(0, lblY, W, lblY + 22);
+  lblGrad.addColorStop(0, lightenHex(S.wrap.color, 20));
+  lblGrad.addColorStop(1, darkenHex(S.wrap.color, 15));
+  ctx.fillStyle = lblGrad;
+  roundRect(ctx, barX, lblY, barW, 22, 6);
+  ctx.fill();
+  ctx.font = '700 9px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.textAlign = 'center';
+  const flavStr = S.flavour.label !== 'Classic' ? S.flavour.label + ' ' : '';
+  ctx.fillText((flavStr + S.base.label + ' · ' + S.mould + ' · ' + S.size.label).toUpperCase(), W/2, lblY + 15);
+  ctx.restore();
+}
+
+function drawSegments(ctx, bx, by, bw, bh, mould, baseColor) {
+  const gap = 3, pad = 10;
+  const ix = bx + pad, iy = by + pad, iw = bw - pad*2, ih = bh - pad*2;
+  const strokeCol = darkenHex(baseColor, 20);
+  const lineCol   = 'rgba(0,0,0,0.25)';
+
+  ctx.save();
+  ctx.strokeStyle = lineCol;
+  ctx.lineWidth = gap;
+
+  if (mould === 'Classic Bar' || mould === 'Squares') {
+    const cols = 4, rows = 3;
+    const sw = iw / cols, sh = ih / rows;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        ctx.strokeRect(ix + c*sw + gap/2, iy + r*sh + gap/2, sw - gap, sh - gap);
+      }
+    }
+  } else if (mould === 'Hearts') {
+    for (let i = 0; i < 6; i++) {
+      const cx2 = ix + (i % 3) * (iw/3) + iw/6;
+      const cy2 = iy + Math.floor(i/3) * (ih/2) + ih/4;
+      drawHeart(ctx, cx2, cy2, 18);
+    }
+  } else if (mould === 'Rounds') {
+    for (let i = 0; i < 8; i++) {
+      const cx2 = ix + (i % 4) * (iw/4) + iw/8;
+      const cy2 = iy + Math.floor(i/4) * (ih/2) + ih/4;
+      ctx.beginPath(); ctx.arc(cx2, cy2, 16, 0, Math.PI*2); ctx.stroke();
+    }
+  } else if (mould === 'Stars') {
+    for (let i = 0; i < 6; i++) {
+      const cx2 = ix + (i % 3) * (iw/3) + iw/6;
+      const cy2 = iy + Math.floor(i/3) * (ih/2) + ih/4;
+      drawStar(ctx, cx2, cy2, 18, 5);
+    }
+  } else if (mould === 'Diamonds') {
+    for (let i = 0; i < 8; i++) {
+      const cx2 = ix + (i % 4) * (iw/4) + iw/8;
+      const cy2 = iy + Math.floor(i/4) * (ih/2) + ih/4;
+      ctx.save(); ctx.translate(cx2, cy2); ctx.rotate(Math.PI/4);
+      ctx.strokeRect(-12, -12, 24, 24); ctx.restore();
+    }
+  } else if (mould === 'Leaves') {
+    for (let i = 0; i < 6; i++) {
+      const cx2 = ix + (i % 3) * (iw/3) + iw/6;
+      const cy2 = iy + Math.floor(i/3) * (ih/2) + ih/4;
+      drawLeaf(ctx, cx2, cy2, 20);
+    }
+  } else if (mould === 'Roses') {
+    for (let i = 0; i < 6; i++) {
+      const cx2 = ix + (i % 3) * (iw/3) + iw/6;
+      const cy2 = iy + Math.floor(i/3) * (ih/2) + ih/4;
+      drawRose(ctx, cx2, cy2, 18);
+    }
+  }
+  ctx.restore();
+}
+
+function drawHeart(ctx, x, y, r) {
+  ctx.beginPath();
+  ctx.moveTo(x, y + r*0.3);
+  ctx.bezierCurveTo(x, y - r*0.4, x - r, y - r*0.4, x - r, y + r*0.15);
+  ctx.bezierCurveTo(x - r, y + r*0.7, x, y + r, x, y + r);
+  ctx.bezierCurveTo(x, y + r, x + r, y + r*0.7, x + r, y + r*0.15);
+  ctx.bezierCurveTo(x + r, y - r*0.4, x, y - r*0.4, x, y + r*0.3);
+  ctx.stroke();
+}
+
+function drawStar(ctx, x, y, r, n) {
+  ctx.beginPath();
+  for (let i = 0; i < n * 2; i++) {
+    const angle = (i * Math.PI) / n - Math.PI/2;
+    const rad = i % 2 === 0 ? r : r * 0.45;
+    i === 0 ? ctx.moveTo(x + rad * Math.cos(angle), y + rad * Math.sin(angle))
+            : ctx.lineTo(x + rad * Math.cos(angle), y + rad * Math.sin(angle));
+  }
+  ctx.closePath(); ctx.stroke();
+}
+
+function drawLeaf(ctx, x, y, r) {
+  ctx.beginPath();
+  ctx.moveTo(x, y - r);
+  ctx.bezierCurveTo(x + r, y - r*0.5, x + r, y + r*0.5, x, y + r);
+  ctx.bezierCurveTo(x - r, y + r*0.5, x - r, y - r*0.5, x, y - r);
+  ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x, y - r); ctx.lineTo(x, y + r); ctx.stroke();
+}
+
+function drawRose(ctx, x, y, r) {
+  for (let p = 0; p < 5; p++) {
+    const a = (p / 5) * Math.PI * 2 - Math.PI / 2;
+    const px = x + Math.cos(a) * r * 0.5;
+    const py = y + Math.sin(a) * r * 0.5;
+    ctx.beginPath(); ctx.arc(px, py, r*0.42, 0, Math.PI*2); ctx.stroke();
+  }
+  ctx.beginPath(); ctx.arc(x, y, r*0.3, 0, Math.PI*2); ctx.stroke();
+}
+
+function drawToppings(ctx, ax, ay, aw, ah) {
+  if (!S.toppings.length) return;
+  const positions = [
+    [.12,.18],[.55,.12],[.80,.30],[.25,.60],[.70,.55],[.45,.35],
+    [.15,.75],[.85,.70],[.38,.82],[.65,.22],[.05,.45],[.90,.50]
+  ];
+  S.toppings.forEach((top, ti) => {
+    const count = 4 + ti;
+    for (let k = 0; k < count; k++) {
+      const pos = positions[(ti * 3 + k) % positions.length];
+      const jx = ax + pos[0] * aw + (Math.sin(ti*7+k*13) * 12);
+      const jy = ay + pos[1] * ah + (Math.cos(ti*5+k*11) * 10);
+      const clx = Math.max(ax, Math.min(ax+aw-4, jx));
+      const cly = Math.max(ay, Math.min(ay+ah-4, jy));
+      drawToppingDot(ctx, clx, cly, top.type);
+    }
+  });
+}
+
+function drawToppingDot(ctx, x, y, type) {
+  ctx.save();
+  switch(type) {
+    case 'almond':
+      ctx.fillStyle = '#C49A6C';
+      ctx.beginPath(); ctx.ellipse(x, y, 5, 3, 0.5, 0, Math.PI*2); ctx.fill(); break;
+    case 'salt':
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.fillRect(x-2, y-2, 4, 4); break;
+    case 'rose':
+      ctx.fillStyle = '#FF9EB5';
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#FF7090';
+      ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI*2); ctx.fill(); break;
+    case 'gold':
+      const gGrad = ctx.createRadialGradient(x,y,0,x,y,4);
+      gGrad.addColorStop(0,'#FFF0A0'); gGrad.addColorStop(1,'#E8C020');
+      ctx.fillStyle = gGrad;
+      ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI*2); ctx.fill();
+      ctx.shadowColor='#FFD700'; ctx.shadowBlur=6; ctx.fill(); break;
+    case 'pistachio':
+      ctx.fillStyle = '#7CB85C';
+      ctx.beginPath(); ctx.ellipse(x, y, 4, 3, 0.3, 0, Math.PI*2); ctx.fill(); break;
+    case 'berry':
+      ctx.fillStyle = '#8B2CCC';
+      ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle='#C060FF';
+      ctx.beginPath(); ctx.arc(x-1, y-1, 1.2, 0, Math.PI*2); ctx.fill(); break;
+    case 'coconut':
+      ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(x-5,y); ctx.lineTo(x+5,y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x,y-4); ctx.lineTo(x+3,y+3); ctx.stroke(); break;
+    case 'chilli':
+      ctx.fillStyle = '#CC2200';
+      ctx.beginPath(); ctx.ellipse(x, y, 2, 5, 0.3, 0, Math.PI*2); ctx.fill(); break;
+    case 'cocoa':
+      ctx.fillStyle = '#4A2800';
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,.2)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI*2); ctx.stroke(); break;
+    case 'honey':
+      ctx.fillStyle = '#E8A020';
+      ctx.beginPath();
+      for(let i=0;i<6;i++){const a=i*Math.PI/3;ctx.lineTo(x+Math.cos(a)*4,y+Math.sin(a)*4);}
+      ctx.closePath(); ctx.fill(); break;
+    default:
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// ═══════════════════════════════════════
+//  CANVAS HELPERS
+// ═══════════════════════════════════════
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function hexAlpha(hex, a) {
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+function lightenHex(hex, pct) { return shiftHex(hex, pct); }
+function darkenHex(hex, pct)  { return shiftHex(hex, -pct); }
+function shiftHex(hex, pct) {
+  let h = hex.startsWith('#') ? hex : '#' + hex;
+  let r=parseInt(h.slice(1,3),16)||0, g=parseInt(h.slice(3,5),16)||0, b=parseInt(h.slice(5,7),16)||0;
+  r = Math.min(255,Math.max(0,r+Math.round(pct*2.55)));
+  g = Math.min(255,Math.max(0,g+Math.round(pct*2.55)));
+  b = Math.min(255,Math.max(0,b+Math.round(pct*2.55)));
+  return `rgb(${r},${g},${b})`;
+}
+
+// ═══════════════════════════════════════
+//  SUMMARY
+// ═══════════════════════════════════════
+function calcUnit() {
+  return S.size.price + S.base.extra + S.flavour.extra + S.fill.extra + S.toppings.reduce((s,t)=>s+t.cost,0);
+}
+function calcTotal() { return calcUnit() * S.qty; }
+
+function refreshSummary() {
+  const flavStr = S.flavour.label !== 'Classic' ? S.flavour.label + ' ' : '';
+  const name = flavStr + S.base.label + ' Chocolate';
+  document.getElementById('bar-name').textContent   = name;
+  document.getElementById('s-base').textContent     = S.base.label;
+  document.getElementById('s-wrap').textContent     = S.wrap.label;
+  document.getElementById('s-flavour').textContent  = S.flavour.label;
+  document.getElementById('s-mould').textContent    = S.mould;
+  document.getElementById('s-fill').textContent     = S.fill.label;
+  document.getElementById('s-tops').textContent     = S.toppings.length ? S.toppings.map(t=>t.label).join(', ') : 'None';
+  document.getElementById('s-size').textContent     = S.size.label;
+  document.getElementById('s-qty').textContent      = `× ${S.qty}`;
+  document.getElementById('s-total').textContent    = `₹${calcTotal()}`;
+  document.getElementById('qty-unit').textContent   = `× ₹${calcUnit()} each`;
+}
+
+// ═══════════════════════════════════════
+//  CART
+// ═══════════════════════════════════════
+function addToCart() {
+  const flavStr = S.flavour.label !== 'Classic' ? S.flavour.label + ' ' : '';
+  const name = flavStr + S.base.label + ' Chocolate (' + S.size.label + ')';
+  const unitPrice = calcUnit();
+  Cart.add({ id:'custom-'+Date.now(), name, price: unitPrice * S.qty, qty: 1, img:'https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=200&q=70' });
+  showToast(`"${name}" added to cart! 🍫`);
+}
+
+function resetAll() { location.reload(); }
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  buildProgress();
+  drawCanvas();
+  refreshSummary();
+});
+</script>
+</body>
+</html>

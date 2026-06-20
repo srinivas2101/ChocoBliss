@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruby Chocolate — ChocoBliss</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo"><span>🍫</span> ChocoBliss</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      
+    </ul>
+    <button class="nav-cart" onclick="location.href='cart.html'">🛒 Cart <span class="cart-badge">0</span></button>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <h1>🩷 Ruby Chocolate Collection</h1>
+      <p>Explore our premium ruby chocolate range — handcrafted with the finest ingredients.</p>
+    </div>
+    <svg class="page-hero-wave" viewBox="0 0 1440 60" fill="none"><path d="M0 60L1440 60L1440 0Q720 60 0 0Z" fill="#FDF6EE"/></svg>
+  </div>
+
+  <div class="section">
+    <div class="prod-controls">
+      <div class="search-wrap"><input id="search" type="text" placeholder="Search ruby chocolate…"></div>
+      <select id="sort" class="sort-select">
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="name-az">Name: A → Z</option>
+      </select>
+      <div class="count-badge" id="count-badge">30 items</div>
+    </div>
+    <div class="product-grid" id="product-grid"></div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo">🍫 ChocoBliss</div><p>Premium artisan chocolates delivered to your door.</p></div>
+      <div class="footer-col"><h4>Shop</h4><ul><li><a href="dark.html">Dark</a></li><li><a href="milk.html">Milk</a></li><li><a href="white.html">White</a></li><li><a href="sugarfree.html">Sugar-Free</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 ChocoBliss</span><span>Sweetness Delivered 🍫</span></div>
+  </footer>
+
+  <script src="../assets/js/cart.js"></script>
+  <script src="../assets/js/products.js"></script>
+  <script>
+  const PRODUCTS = [
+    {id:600,name:"Classic Ruby Chocolate",price:189,img:"https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80"},
+    {id:601,name:"Almond Ruby Chocolate",price:195,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+    {id:602,name:"Hazelnut Ruby Chocolate",price:201,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:603,name:"Strawberry Ruby Chocolate",price:207,img:"https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&q=80"},
+    {id:604,name:"Caramel Ruby Chocolate",price:213,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80"},
+    {id:605,name:"Coconut Ruby Chocolate",price:219,img:"https://images.unsplash.com/photo-1575377427642-087cf684f29d?w=400&q=80"},
+    {id:606,name:"Orange Ruby Chocolate",price:225,img:"https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80"},
+    {id:607,name:"Raspberry Ruby Chocolate",price:231,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+    {id:608,name:"Mango Ruby Chocolate",price:237,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:609,name:"Blueberry Ruby Chocolate",price:243,img:"https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&q=80"},
+    {id:610,name:"Rose Ruby Chocolate",price:249,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80"},
+    {id:611,name:"Cardamom Ruby Chocolate",price:255,img:"https://images.unsplash.com/photo-1575377427642-087cf684f29d?w=400&q=80"},
+    {id:612,name:"Pistachio Ruby Chocolate",price:261,img:"https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80"},
+    {id:613,name:"Espresso Ruby Chocolate",price:267,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+    {id:614,name:"Mint Ruby Chocolate",price:273,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:615,name:"Lemon Ruby Chocolate",price:279,img:"https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&q=80"},
+    {id:616,name:"Fig Ruby Chocolate",price:285,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80"},
+    {id:617,name:"Cranberry Ruby Chocolate",price:291,img:"https://images.unsplash.com/photo-1575377427642-087cf684f29d?w=400&q=80"},
+    {id:618,name:"Walnut Ruby Chocolate",price:297,img:"https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80"},
+    {id:619,name:"Cashew Ruby Chocolate",price:303,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+    {id:620,name:"Kesar Ruby Chocolate",price:309,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:621,name:"Saffron Ruby Chocolate",price:315,img:"https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&q=80"},
+    {id:622,name:"Lavender Ruby Chocolate",price:321,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80"},
+    {id:623,name:"Matcha Ruby Chocolate",price:327,img:"https://images.unsplash.com/photo-1575377427642-087cf684f29d?w=400&q=80"},
+    {id:624,name:"Honey Ruby Chocolate",price:333,img:"https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80"},
+    {id:625,name:"Ginger Ruby Chocolate",price:339,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+    {id:626,name:"Cinnamon Ruby Chocolate",price:345,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:627,name:"Turmeric Ruby Chocolate",price:351,img:"https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&q=80"},
+    {id:628,name:"Apricot Ruby Chocolate",price:357,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80"},
+    {id:629,name:"Maple Ruby Chocolate",price:363,img:"https://images.unsplash.com/photo-1575377427642-087cf684f29d?w=400&q=80"}
+  ];
+  document.addEventListener('DOMContentLoaded', () => initProductPage(PRODUCTS));
+  </script>
+</body>
+</html>

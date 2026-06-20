@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Chocolate — ChocoBliss</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo"><span>🍫</span> ChocoBliss</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      
+    </ul>
+    <button class="nav-cart" onclick="location.href='cart.html'">
+      🛒 Cart <span class="cart-badge">0</span>
+    </button>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <h1>🍫 Dark Chocolate</h1>
+      <p>Bold, intense, and deeply satisfying — our finest dark collection.</p>
+    </div>
+    <svg class="page-hero-wave" viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 60L1440 60L1440 0Q720 60 0 0Z" fill="#FDF6EE"/>
+    </svg>
+  </div>
+
+  <div class="section">
+    <div class="prod-controls">
+      <div class="search-wrap"><input id="search" type="text" placeholder="Search dark chocolates…"></div>
+      <select id="sort" class="sort-select">
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="name-az">Name: A → Z</option>
+      </select>
+      <div class="count-badge" id="count-badge">50 items</div>
+    </div>
+    <div class="product-grid" id="product-grid"></div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo">🍫 ChocoBliss</div><p>Premium artisan chocolates delivered to your door.</p></div>
+      <div class="footer-col"><h4>Shop</h4><ul><li><a href="dark.html">Dark</a></li><li><a href="milk.html">Milk</a></li><li><a href="white.html">White</a></li><li><a href="sugarfree.html">Sugar-Free</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 ChocoBliss</span><span>Sweetness Delivered 🍫</span></div>
+  </footer>
+
+  <script src="../assets/js/cart.js"></script>
+  <script src="../assets/js/products.js"></script>
+  <script>
+  const DARK_PRODUCTS = [
+    {id:101,name:"Classic Dark Chocolate",price:199,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:102,name:"Vanilla Bean Dark",price:209,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+    {id:103,name:"Dark Almond Crunch",price:219,img:"https://images.unsplash.com/photo-1575377427642-087cf684f29d?w=400&q=80"},
+    {id:104,name:"Strawberry Dark",price:229,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80"},
+    {id:105,name:"Raspberry Swirl Dark",price:239,img:"https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80"},
+    {id:106,name:"Blueberry Dark Delight",price:249,img:"https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&q=80"},
+    {id:107,name:"Mango Dark Fusion",price:259,img:"https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&q=80"},
+    {id:108,name:"Pistachio Dark",price:269,img:"https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=400&q=80"},
+    {id:109,name:"Hazelnut Dark",price:279,img:"https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&q=80"},
+    {id:110,name:"Cashew Dark",price:259,img:"https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?w=400&q=80"},
+    {id:111,name:"Coconut Dark",price:249,img:"https://images.unsplash.com/photo-1604079628040-94301bb21b91?w=400&q=80"},
+    {id:112,name:"Orange Dark Zest",price:239,img:"https://images.unsplash.com/photo-1567206563114-c179900d7cf0?w=400&q=80"},
+    {id:113,name:"Espresso Dark",price:259,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:114,name:"Peppermint Dark",price:219,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+    {id:115,name:"Rose Petal Dark",price:279,img:"https://images.unsplash.com/photo-1575377427642-087cf684f29d?w=400&q=80"},
+    {id:116,name:"Cardamom Kiss Dark",price:249,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80"},
+    {id:117,name:"Matcha Dark",price:269,img:"https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80"},
+    {id:118,name:"Ginger Honey Dark",price:239,img:"https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&q=80"},
+    {id:119,name:"Lemon Dark",price:229,img:"https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&q=80"},
+    {id:120,name:"Fig Walnut Dark",price:289,img:"https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=400&q=80"},
+    {id:121,name:"Caramel Sea Salt Dark",price:279,img:"https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&q=80"},
+    {id:122,name:"Cranberry Dark",price:249,img:"https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?w=400&q=80"},
+    {id:123,name:"Honeycomb Dark",price:259,img:"https://images.unsplash.com/photo-1604079628040-94301bb21b91?w=400&q=80"},
+    {id:124,name:"Cocoa Nib Dark",price:269,img:"https://images.unsplash.com/photo-1567206563114-c179900d7cf0?w=400&q=80"},
+    {id:125,name:"Maple Walnut Dark",price:279,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:126,name:"Black Pepper Dark",price:229,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+    {id:127,name:"Apricot Dark",price:259,img:"https://images.unsplash.com/photo-1575377427642-087cf684f29d?w=400&q=80"},
+    {id:128,name:"Lavender Dark",price:279,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80"},
+    {id:129,name:"Mint Matcha Dark",price:269,img:"https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80"},
+    {id:130,name:"Pear Almond Dark",price:249,img:"https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&q=80"},
+    {id:131,name:"Saffron Pistachio Dark",price:319,img:"https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&q=80"},
+    {id:132,name:"Kesar Pista Dark",price:309,img:"https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=400&q=80"},
+    {id:133,name:"Date Walnut Dark",price:269,img:"https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&q=80"},
+    {id:134,name:"Cinnamon Swirl Dark",price:239,img:"https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?w=400&q=80"},
+    {id:135,name:"Olive Oil Sea Salt Dark",price:289,img:"https://images.unsplash.com/photo-1604079628040-94301bb21b91?w=400&q=80"},
+    {id:136,name:"Peppercorn Almond Dark",price:259,img:"https://images.unsplash.com/photo-1567206563114-c179900d7cf0?w=400&q=80"},
+    {id:137,name:"Turmeric Honey Dark",price:249,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:138,name:"Sage Citrus Dark",price:239,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+    {id:139,name:"Basil Dark",price:229,img:"https://images.unsplash.com/photo-1575377427642-087cf684f29d?w=400&q=80"},
+    {id:140,name:"Blue Cheese Fig Dark",price:299,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80"},
+    {id:141,name:"Plum Cardamom Dark",price:269,img:"https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80"},
+    {id:142,name:"Toasted Sesame Dark",price:249,img:"https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&q=80"},
+    {id:143,name:"Pomegranate Dark",price:259,img:"https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&q=80"},
+    {id:144,name:"Walnut Espresso Dark",price:279,img:"https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=400&q=80"},
+    {id:145,name:"Yuzu Citrus Dark",price:289,img:"https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&q=80"},
+    {id:146,name:"Lavender Lemon Dark",price:269,img:"https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?w=400&q=80"},
+    {id:147,name:"Saffron Dark",price:299,img:"https://images.unsplash.com/photo-1604079628040-94301bb21b91?w=400&q=80"},
+    {id:148,name:"Mango Chilli Dark",price:249,img:"https://images.unsplash.com/photo-1567206563114-c179900d7cf0?w=400&q=80"},
+    {id:149,name:"Pistachio Cranberry Dark",price:279,img:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400&q=80"},
+    {id:150,name:"Classic Extra Dark 85%",price:219,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&q=80"},
+  ];
+  document.addEventListener('DOMContentLoaded', () => initProductPage(DARK_PRODUCTS));
+  </script>
+</body>
+</html>
