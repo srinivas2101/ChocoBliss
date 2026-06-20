@@ -1,4 +1,4 @@
-# 🍫 ChocoBliss — Premium Chocolate E-Commerce Website
+# 🍫 ChocoBliss — Chocolate E-Commerce Website
 
 A fully responsive, multi-page chocolate e-commerce frontend built with **pure HTML, CSS, and vanilla JavaScript** — no frameworks required.
 
